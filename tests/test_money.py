@@ -12,3 +12,4 @@ class TestMoney:
 
     def test_equality(self):
         assert money.Dollar(5) == money.Dollar(5)
+        assert money.Dollar(6) == money.Dollar(6)
