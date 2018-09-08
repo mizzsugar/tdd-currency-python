@@ -20,6 +20,10 @@ class Money(abc.ABC):
     def times(self, multiplier: int) -> 'Money':
         pass
 
+    @abc.abstractclassmethod
+    def currency(self) -> str:
+        pass
+
 
 class Dollar(Money):
     def __init__(self, amount: int) -> None:
@@ -28,6 +32,9 @@ class Dollar(Money):
     def times(self, multiplier: int) -> 'Money':
         return Dollar(self._amount * multiplier)
 
+    def currency(self) -> str:
+        return "USD"
+
 
 class Franc(Money):
     def __init__(self, amount: int) -> None:
@@ -35,3 +42,6 @@ class Franc(Money):
 
     def times(self, multiplier: int) -> 'Money':
         return Franc(self._amount * multiplier)
+
+    def currency(self) -> str:
+        return "CHF"
