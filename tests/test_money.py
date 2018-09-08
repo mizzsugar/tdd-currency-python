@@ -13,15 +13,5 @@ class TestMoney:
 
     def test_equality(self):
         assert money.Money.dollar(5) == money.Money.dollar(5)
-        assert money.Money.dollar(6) == money.Money.dollar(6)
-        assert money.Money.franc(5) == money.Money.franc(5)
         assert money.Money.franc(5) != money.Money.franc(6)
         assert money.Money.franc(5) != money.Money.dollar(5)
-
-    def test_franc_multiplication(self):
-        five = money.Money.franc(5)
-        assert money.Money.franc(10) == five.times(2)
-        assert money.Money.franc(15) == five.times(3)
-
-    def test_different_class_equality(self):
-        assert money.Money(10, 'CHF') == money.Money.franc(10)
