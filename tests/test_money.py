@@ -2,6 +2,9 @@ import money
 
 
 class TestMoney:
+    def test_currency(self):
+        assert "USD" == money.Money.dollar(1).currency()
+        assert "CHF" == money.Money.franc(1).currency()
 
     def test_multiplication(self):
         five = money.Money.dollar(5)
