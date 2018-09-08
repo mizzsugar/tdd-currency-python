@@ -1,5 +1,6 @@
 import abc
 
+
 class Money(abc.ABC):
     def __eq__(self, money: 'Money') -> bool:
         return (
@@ -14,6 +15,7 @@ class Money(abc.ABC):
     @abc.abstractclassmethod
     def times(self, multiplier: int) -> 'Money':
         pass
+
 
 class Dollar(Money):
     def __init__(self, amount: int) -> None:
