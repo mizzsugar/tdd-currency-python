@@ -10,7 +10,7 @@ class Dollar(Money):
     def __init__(self, amount: int) -> None:
         self._amount = amount
 
-    def times(self, multiplier: int) -> 'Dollar':
+    def times(self, multiplier: int) -> 'Money':
         return Dollar(self._amount * multiplier)
 
 
@@ -18,5 +18,5 @@ class Franc(Money):
     def __init__(self, amount: int) -> None:
         self._amount = amount
 
-    def times(self, multiplier: int) -> 'Franc':
+    def times(self, multiplier: int) -> 'Money':
         return Franc(self._amount * multiplier)
