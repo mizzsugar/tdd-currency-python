@@ -18,4 +18,6 @@ class TestMoney:
 
     def test_simple_addition(self):
         five = money.Money.dollar(5)
-        assert five.plus(five) == money.Money.dollar(10)
+        reduced = money.Bank().reduce(five.plus(five))
+
+        assert reduced == money.Money.dollar(10)
