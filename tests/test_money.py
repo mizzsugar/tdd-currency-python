@@ -15,3 +15,7 @@ class TestMoney:
         assert money.Money.dollar(5) == money.Money.dollar(5)
         assert money.Money.franc(5) != money.Money.franc(6)
         assert money.Money.franc(5) != money.Money.dollar(5)
+
+    def test_simple_addition(self):
+        five = money.Money.dollar(5)
+        assert five.plus(five) == money.Money.dollar(10)
