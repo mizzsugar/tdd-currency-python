@@ -1,10 +1,19 @@
-class Money:
+import abc
+
+class Money(abc.ABC):
     def __eq__(self, money: 'Money') -> bool:
         return (
             self._amount == money._amount and
             self.__class__ == money.__class__
         )
 
+    @classmethod
+    def dollar(cls, amount: int) -> 'Money':
+        return Dollar(amount)
+
+    @abc.abstractclassmethod
+    def times(self, multiplier: int) -> 'Money':
+        pass
 
 class Dollar(Money):
     def __init__(self, amount: int) -> None:
