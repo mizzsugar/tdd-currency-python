@@ -4,7 +4,7 @@ import money
 class TestMoney:
 
     def test_multiplication(self):
-        five = money.Dollar(5)
+        five = money.Money.dollar(5)
         assert money.Dollar(10) == five.times(2)
         assert money.Dollar(15) == five.times(3)
 
