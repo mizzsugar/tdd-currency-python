@@ -22,3 +22,11 @@ class Money:
 
     def currency(self) -> str:
         return self._currency
+
+    def plus(self, added: 'Money') -> 'Money':
+        return Money(self._amount + added._amount, self._currency)
+
+
+class Bank:
+    def reduce(self, money: 'Money') -> 'Money':
+        return money
