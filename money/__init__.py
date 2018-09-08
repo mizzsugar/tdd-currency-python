@@ -12,6 +12,10 @@ class Money(abc.ABC):
     def dollar(cls, amount: int) -> 'Money':
         return Dollar(amount)
 
+    @classmethod
+    def franc(cls, amount: int) -> 'Money':
+        return Franc(amount)
+
     @abc.abstractclassmethod
     def times(self, multiplier: int) -> 'Money':
         pass
