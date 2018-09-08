@@ -22,3 +22,6 @@ class TestMoney:
         five = money.Money.franc(5)
         assert money.Money.franc(10) == five.times(2)
         assert money.Money.franc(15) == five.times(3)
+
+    def test_different_class_equality(self):
+        assert money.Money(10, 'CHF') == money.Money.franc(10)
