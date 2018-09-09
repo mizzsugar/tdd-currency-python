@@ -29,13 +29,16 @@ class Money:
 
 class Bank:
     def reduce(self, sum_expression: 'SumExpression') -> 'Money':
-        return Money(
-            sum_expression.augend._amount + sum_expression.addend._amount,
-            sum_expression.augend._currency
-        )
+        return sum_expression.reduce()
 
 
 class SumExpression:
     def __init__(self, augend: 'Money', addend: 'Money') -> None:
         self.augend = augend
         self.addend = addend
+
+    def reduce(self) -> 'Money':
+        return Money(
+            self.augend._amount + self.addend._amount,
+            self.augend._currency
+        )
