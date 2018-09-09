@@ -31,3 +31,9 @@ class TestMoney:
 
         assert sum_expression.augend == five_dollar
         assert sum_expression.addend == five_dollar
+
+    def test_reduce_sum(self):
+        sum_expression = money.SumExpression(
+            money.Money.dollar(3), money.Money.dollar(4))
+        reduced = money.Bank().reduce(sum_expression)
+        assert reduced == money.Money.dollar(7)
