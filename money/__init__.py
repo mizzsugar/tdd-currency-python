@@ -1,9 +1,16 @@
 from typing import (
     Any,
 )
+import abc
 
 
-class Money:
+class Expression(abc.ABC):
+    @abc.abstractmethod
+    def reduce(self) -> 'Money':
+        pass
+
+
+class Money(Expression):
     def __init__(self, amount: int, currency: str) -> None:
         self._amount = amount
         self._currency = currency
@@ -34,13 +41,25 @@ class Money:
     def plus(self, addend: 'Money') -> 'SumExpression':
         return SumExpression(self, addend)
 
+    def reduce(self) -> 'Money':
+        return self
+
 
 class Bank:
-    def reduce(self, sum_expression: 'SumExpression') -> 'Money':
-        return sum_expression.reduce()
+    def reduce(self, expression: 'Expression', currency: str) -> 'Money':
+        if expression.reduce()._currency == "CHF" and currency == "USD":
+            return Money.dollar(expression.reduce()._amount * self._rate)
+        elif expression.reduce()._currency == "USD" and currency == "CHF":
+            return Money.franc(expression.reduce()._amount / self._rate)
+        return Money(expression.reduce()._amount, currency)
+
+    def add_rate(self, chf: str, usd: str, rate: int) -> 'Bank':
+        self._chf = chf
+        self._usd = usd
+        self._rate = rate
 
 
-class SumExpression:
+class SumExpression(Expression):
     def __init__(self, augend: 'Money', addend: 'Money') -> None:
         self.augend = augend
         self.addend = addend
