@@ -1,12 +1,19 @@
+from typing import (
+    Any,
+)
+
 class Money:
     def __init__(self, amount: int, currency: str) -> None:
         self._amount = amount
         self._currency = currency
 
-    def __eq__(self, money: 'Moeny') -> bool:
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, Money):
+            return False
+
         return (
-            self._amount == money._amount and
-            self._currency == money._currency
+            self._amount == other._amount and
+            self._currency == other._currency
         )
 
     @classmethod
