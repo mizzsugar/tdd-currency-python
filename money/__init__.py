@@ -23,10 +23,19 @@ class Money:
     def currency(self) -> str:
         return self._currency
 
-    def plus(self, added: 'Money') -> 'Money':
-        return Money(self._amount + added._amount, self._currency)
+    def plus(self, addend: 'Money') -> 'SumExpression':
+        return SumExpression(self, addend)
 
 
 class Bank:
-    def reduce(self, money: 'Money') -> 'Money':
-        return money
+    def reduce(self, sum_expression: 'SumExpression') -> 'Money':
+        return Money(
+            sum_expression.augend._amount + sum_expression.addend._amount,
+            sum_expression.augend._currency
+        )
+
+
+class SumExpression:
+    def __init__(self, augend: 'Money', addend: 'Money') -> None:
+        self.augend = augend
+        self.addend = addend
