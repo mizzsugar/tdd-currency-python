@@ -1,5 +1,6 @@
 from typing import (
     Any,
+    NamedTuple,
 )
 import abc
 
@@ -46,18 +47,18 @@ class Money(Expression):
 
 
 class Bank:
+    def __init__(self):
+        self._rate_pairs = {}
+
     def reduce(self, expression: 'Expression', currency: str) -> 'Money':
         if expression.reduce()._currency == "CHF" and currency == "USD":
-            return Money.dollar(expression.reduce()._amount * self._rate)
+            return Money.dollar(expression.reduce()._amount * self._rate_pairs["CHF", "USD"])
         elif expression.reduce()._currency == "USD" and currency == "CHF":
-            return Money.franc(expression.reduce()._amount / self._rate)
+            return Money.franc(expression.reduce()._amount / self._rate_pairs["USD", "CHF"])
         return Money(expression.reduce()._amount, currency)
 
-    def add_rate(self, chf: str, usd: str, rate: int) -> 'Bank':
-        self._chf = chf
-        self._usd = usd
-        self._rate = rate
-
+    def add_rate(self, from_: str, to: str, rate: int) -> 'Bank':
+        self._rate_pairs[Pair(from_, to)] = rate
 
 class SumExpression(Expression):
     def __init__(self, augend: 'Money', addend: 'Money') -> None:
@@ -69,3 +70,8 @@ class SumExpression(Expression):
             self.augend._amount + self.addend._amount,
             self.augend._currency
         )
+
+
+class Pair(NamedTuple):
+    from_: str
+    to: str
