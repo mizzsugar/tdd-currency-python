@@ -37,3 +37,9 @@ class TestMoney:
             money.Money.dollar(3), money.Money.dollar(4))
         reduced = money.Bank().reduce(sum_expression)
         assert reduced == money.Money.dollar(7)
+
+    def test_reduce_to_different_currency(self):
+        bank = money.Bank()
+        bank.add_rate("CHF", "USD", 2)
+        actual = bank.reduce(money.Money.franc(2), "USD")
+        assert actual == money.Money.dollar(4)
