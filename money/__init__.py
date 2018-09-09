@@ -1,12 +1,19 @@
+from typing import (
+    Any,
+)
+
 class Money:
     def __init__(self, amount: int, currency: str) -> None:
         self._amount = amount
         self._currency = currency
 
-    def __eq__(self, money: 'Moeny') -> bool:
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, Money):
+            return False
+
         return (
-            self._amount == money._amount and
-            self._currency == money._currency
+            self._amount == other._amount and
+            self._currency == other._currency
         )
 
     @classmethod
@@ -23,10 +30,22 @@ class Money:
     def currency(self) -> str:
         return self._currency
 
-    def plus(self, added: 'Money') -> 'Money':
-        return Money(self._amount + added._amount, self._currency)
+    def plus(self, addend: 'Money') -> 'SumExpression':
+        return SumExpression(self, addend)
 
 
 class Bank:
-    def reduce(self, money: 'Money') -> 'Money':
-        return money
+    def reduce(self, sum_expression: 'SumExpression') -> 'Money':
+        return sum_expression.reduce()
+
+
+class SumExpression:
+    def __init__(self, augend: 'Money', addend: 'Money') -> None:
+        self.augend = augend
+        self.addend = addend
+
+    def reduce(self) -> 'Money':
+        return Money(
+            self.augend._amount + self.addend._amount,
+            self.augend._currency
+        )
