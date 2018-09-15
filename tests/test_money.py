@@ -46,7 +46,7 @@ class TestMoney:
 
     def test_mixed_addition(self, five_dollar):
         bank = money.Bank()
-        bank.add_rate("USD", "CHF", 0.5)
+        bank.add_rate("CHF", "USD", 2)
 
         franc = money.Money.franc(10)
         actual = bank.reduce(five_dollar.plus(franc), "USD")

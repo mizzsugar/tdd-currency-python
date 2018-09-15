@@ -51,8 +51,8 @@ class Bank:
         self._rate_pairs = {}
 
     def reduce(self, expression: 'Expression', currency: str) -> 'Money':
-        from_amount = expression.reduce()._amount
-        from_currency = expression.reduce()._currency
+        from_amount = expression.reduce(self)._amount
+        from_currency = expression.reduce(self)._currency
 
         if from_currency == currency:
             return Money(
@@ -73,11 +73,19 @@ class SumExpression(Expression):
         self.augend = augend
         self.addend = addend
 
-    def reduce(self) -> 'Money':
-        return Money(
-            self.augend._amount + self.addend._amount,
-            self.augend._currency
-        )
+    def reduce(self, bank: 'Bank') -> 'Money':
+        if self.augend._currency == self.addend._currency:
+            return Money(
+                self.augend._amount + self.addend._amount, # same currencies
+                self.augend._currency
+            )
+        else:
+            addend_amount = self.addend._amount + bank._rate_pairs[self.addend._currency, self.augend._currency]
+            return Money(
+                addend_amount, # same currencies
+                self.augend._currency
+            )
+        # reduce curreinces if those of augend and addend are different
 
 
 class Pair(NamedTuple):
