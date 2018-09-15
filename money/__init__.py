@@ -51,14 +51,22 @@ class Bank:
         self._rate_pairs = {}
 
     def reduce(self, expression: 'Expression', currency: str) -> 'Money':
-        if expression.reduce()._currency == "CHF" and currency == "USD":
-            return Money.dollar(expression.reduce()._amount * self._rate_pairs["CHF", "USD"])
-        elif expression.reduce()._currency == "USD" and currency == "CHF":
-            return Money.franc(expression.reduce()._amount / self._rate_pairs["USD", "CHF"])
-        return Money(expression.reduce()._amount, currency)
+        from_amount = expression.reduce()._amount
+        from_currency = expression.reduce()._currency
 
-    def add_rate(self, from_: str, to: str, rate: int) -> 'Bank':
+        if from_currency == currency:
+            return Money(
+                from_amount,
+                currency
+            )
+        return Money(
+            from_amount * self._rate_pairs[from_currency, currency],
+            currency
+            )
+
+    def add_rate(self, from_: str, to: str, rate: int) -> None:
         self._rate_pairs[Pair(from_, to)] = rate
+
 
 class SumExpression(Expression):
     def __init__(self, augend: 'Money', addend: 'Money') -> None:
