@@ -22,7 +22,7 @@ class TestMoney:
         assert money.Money.franc(5) != five_dollar
 
     def test_simple_addition(self, five_dollar):
-        reduced = money.Bank().reduce(five_dollar.plus(five_dollar))
+        reduced = money.Bank().reduce(five_dollar.plus(five_dollar), "USD")
 
         assert reduced == money.Money.dollar(10)
 
@@ -35,5 +35,11 @@ class TestMoney:
     def test_reduce_sum(self):
         sum_expression = money.SumExpression(
             money.Money.dollar(3), money.Money.dollar(4))
-        reduced = money.Bank().reduce(sum_expression)
+        reduced = money.Bank().reduce(sum_expression, "USD")
         assert reduced == money.Money.dollar(7)
+
+    def test_reduce_to_different_currency(self):
+        bank = money.Bank()
+        bank.add_rate("CHF", "USD", 2)
+        actual = bank.reduce(money.Money.franc(2), "USD")
+        assert actual == money.Money.dollar(4)
