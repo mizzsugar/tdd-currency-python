@@ -64,7 +64,7 @@ class Bank:
             currency
             )
 
-    def add_rate(self, from_: str, to: str, rate: int) -> None:
+    def add_rate(self, from_: str, to: str, rate: float) -> None:
         self._rate_pairs[Pair(from_, to)] = rate
 
 
