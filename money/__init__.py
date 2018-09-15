@@ -42,7 +42,7 @@ class Money(Expression):
     def plus(self, addend: 'Money') -> 'SumExpression':
         return SumExpression(self, addend)
 
-    def reduce(self) -> 'Money':
+    def reduce(self, bank: 'Bank') -> 'Money':
         return self
 
 
@@ -74,17 +74,21 @@ class SumExpression(Expression):
         self.addend = addend
 
     def reduce(self, bank: 'Bank') -> 'Money':
-        if self.augend._currency == self.addend._currency:
+        au_currency = self.augend._currency
+        ad_currency = self.addend._currency
+        au_amount = self.augend._amount
+        ad_amount = self.addend._amount
+
+        if au_currency == ad_currency:
             return Money(
-                self.augend._amount + self.addend._amount, # same currencies
-                self.augend._currency
-            )
-        else:
-            addend_amount = self.addend._amount + bank._rate_pairs[self.addend._currency, self.augend._currency]
-            return Money(
-                addend_amount, # same currencies
-                self.augend._currency
-            )
+                au_amount + ad_amount,
+                au_currency
+                )
+        reduced_amount = ad_amount / bank._rate_pairs[ad_currency, au_currency]
+        return Money(
+            au_amount + reduced_amount,
+            au_currency
+        )
         # reduce curreinces if those of augend and addend are different
 
 
