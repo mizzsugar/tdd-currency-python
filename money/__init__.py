@@ -7,7 +7,7 @@ import abc
 
 class Expression(abc.ABC):
     @abc.abstractmethod
-    def reduce(self) -> 'Money':
+    def reduce(self, bank: 'Bank') -> 'Money':
         pass
 
 
@@ -42,7 +42,7 @@ class Money(Expression):
     def plus(self, addend: 'Money') -> 'SumExpression':
         return SumExpression(self, addend)
 
-    def reduce(self) -> 'Money':
+    def reduce(self, bank: 'Bank') -> 'Money':
         return self
 
 
@@ -51,8 +51,8 @@ class Bank:
         self._rate_pairs = {}
 
     def reduce(self, expression: 'Expression', currency: str) -> 'Money':
-        from_amount = expression.reduce()._amount
-        from_currency = expression.reduce()._currency
+        from_amount = expression.reduce(self)._amount
+        from_currency = expression.reduce(self)._currency
 
         if from_currency == currency:
             return Money(
@@ -64,7 +64,7 @@ class Bank:
             currency
             )
 
-    def add_rate(self, from_: str, to: str, rate: int) -> None:
+    def add_rate(self, from_: str, to: str, rate: float) -> None:
         self._rate_pairs[Pair(from_, to)] = rate
 
 
@@ -73,11 +73,23 @@ class SumExpression(Expression):
         self.augend = augend
         self.addend = addend
 
-    def reduce(self) -> 'Money':
+    def reduce(self, bank: 'Bank') -> 'Money':
+        au_currency = self.augend._currency
+        ad_currency = self.addend._currency
+        au_amount = self.augend._amount
+        ad_amount = self.addend._amount
+
+        if au_currency == ad_currency:
+            return Money(
+                au_amount + ad_amount,
+                au_currency
+                )
+        reduced_amount = ad_amount / bank._rate_pairs[ad_currency, au_currency]
         return Money(
-            self.augend._amount + self.addend._amount,
-            self.augend._currency
+            au_amount + reduced_amount,
+            au_currency
         )
+        # reduce curreinces if those of augend and addend are different
 
 
 class Pair(NamedTuple):
