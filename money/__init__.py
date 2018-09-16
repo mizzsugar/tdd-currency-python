@@ -10,6 +10,9 @@ class Expression(abc.ABC):
     def reduce(self, bank: 'Bank') -> 'Money':
         pass
 
+    def times(self, multiplier: int) -> 'Expression':
+        pass
+
 
 class Money(Expression):
     def __init__(self, amount: int, currency: str) -> None:
@@ -93,6 +96,11 @@ class SumExpression(Expression):
 
     def plus(self, expression: 'Expression') -> 'SumExpression':
         return SumExpression(self, expression)
+
+    def times(self, multiplier: int) -> 'SumExpression':
+        au_expression = self.augend.times(multiplier)
+        ad_expression = self.addend.times(multiplier)
+        return SumExpression(au_expression, ad_expression)
 
 
 class Pair(NamedTuple):
