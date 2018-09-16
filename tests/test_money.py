@@ -44,16 +44,11 @@ class TestMoney:
         reduced = money.Bank().reduce(sum_expression, "USD")
         assert reduced == money.Money.dollar(7)
 
-    def test_reduce_to_different_currency(self):
-        bank = money.Bank()
-        bank.add_rate("CHF", "USD", 2)
+    def test_reduce_to_different_currency(self, bank):
         actual = bank.reduce(money.Money.franc(2), "USD")
         assert actual == money.Money.dollar(4)
 
-    def test_mixed_addition(self, five_dollar):
-        bank = money.Bank()
-        bank.add_rate("CHF", "USD", 2)
-
+    def test_mixed_addition(self, bank, five_dollar):
         franc = money.Money.franc(10)
         actual = bank.reduce(five_dollar.plus(franc), "USD")
         assert actual == money.Money.dollar(10)
