@@ -8,6 +8,12 @@ class TestMoney:
     def five_dollar(self):
         return money.Money.dollar(5)
 
+    @pytest.fixture
+    def bank(self):
+        bank = money.Bank()
+        bank.add_rate("CHF", "USD", 2)
+        return bank
+
     def test_currency(self, five_dollar):
         assert "USD" == five_dollar.currency()
         assert "CHF" == money.Money.franc(1).currency()
@@ -51,3 +57,8 @@ class TestMoney:
         franc = money.Money.franc(10)
         actual = bank.reduce(five_dollar.plus(franc), "USD")
         assert actual == money.Money.dollar(10)
+
+    def test_sum_plus_money(self, bank, five_dollar):
+        franc = money.Money.franc(10)
+        expression = money.SumExpression(five_dollar, franc).plus(five_dollar)
+        assert bank.reduce(expression, "USD") == money.Money.dollar(15)
