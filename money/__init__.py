@@ -7,7 +7,7 @@ import abc
 
 class Expression(abc.ABC):
     @abc.abstractmethod
-    def reduce(self) -> 'Money':
+    def reduce(self, bank: 'Bank') -> 'Money':
         pass
 
 
